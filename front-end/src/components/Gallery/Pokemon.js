@@ -43,7 +43,7 @@ const Container = styled.div`
   }
   :hover{
     cursor: pointer;
-    background-color: #626262;
+    background-color: #8e8e8e;
     color: white;
   }
 `;

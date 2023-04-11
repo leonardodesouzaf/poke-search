@@ -1,5 +1,18 @@
 import styled from 'styled-components';
 
+export const PokemonFilterImg = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  p{
+    margin-top: 5px;
+  }
+  img{
+    width: 70px;
+    height: 70px;
+  }
+`;
+
 export const PokemonFilters = styled.div`
   font-family: "Lexend Deca", sans-serif;
   color: black;
@@ -9,6 +22,15 @@ export const PokemonFilters = styled.div`
   padding-left: 20px;
   width: 100%;
   height: 80vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 30px;
+  div{
+    display: flex;
+    width: 100%;
+  }
 `;
 
 export const PokemonList = styled.div`
