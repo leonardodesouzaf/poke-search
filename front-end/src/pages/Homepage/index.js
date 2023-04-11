@@ -1,6 +1,6 @@
 import { PokeballBottom, PokeballCircle, PokeballTop } from '../../components/Homepage';
 import { useNavigate } from 'react-router-dom';
-import HomepageLayout from '../../layouts/Homepage';
+import HomepageLayout from '../../layouts/Page';
 import { useState } from 'react';
 import { Slide } from '@material-ui/core';
 

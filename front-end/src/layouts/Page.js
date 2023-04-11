@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
-export default function Homepage({ children }) {
+export default function Page({ children }) {
   return (
-    <Page>
+    <PageContainer>
       { children }
-    </Page>
+    </PageContainer>
   );
 }
 
-const Page = styled.div`
+const PageContainer = styled.div`
   background: black;
   color: white;
   min-height: 100vh;
@@ -19,6 +19,7 @@ const Page = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 
   *{
     -ms-overflow-style: none;
