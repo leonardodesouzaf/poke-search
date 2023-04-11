@@ -7,6 +7,7 @@ import {
 import { ToastContainer } from 'react-toastify';
 
 import Homepage from './pages/Homepage';
+import Gallery from './pages/Gallery';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/homepage" />} />
           <Route path="/homepage" element={<Homepage />} />
+          <Route path="/gallery" element={<Gallery />} />
         </Routes>
       </Router>
     </>

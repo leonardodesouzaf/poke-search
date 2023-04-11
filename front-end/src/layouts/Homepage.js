@@ -9,11 +9,12 @@ export default function Homepage({ children }) {
 }
 
 const Page = styled.div`
-  background: rgba(255,28,28,255);
+  background: black;
   color: white;
   min-height: 100vh;
   height: 100%;
   width: 100%;
+  position: relative;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
