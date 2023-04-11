@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  brasilidades-db:
+    image: postgres:13
+    container_name: brasilidades-db
+    restart: always
+    ports:
+      - 2345:5432
+    env_file:
+      - ./back-end/.env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  brasilidades-back:
+    container_name: brasilidades-back
+    build: ./back-end
+    ports:
+      - 4000:4000
+    depends_on:
+      - brasilidades-db
+    env_file:
+      - ./back-end/.env
+    volumes:
+      - ./back-end:/brasilidades-back
+      - /brasilidades-back/node_modules
+    entrypoint: dockerize -wait tcp://brasilidades-db:5432 -timeout 20s docker-entrypoint.sh
+    command: "npm run startdocker"
+
+  brasilidades-front:
+    container_name: brasilidades-front
+    build: ./front-end
+    ports:
+      - 3000:3000
+    depends_on:
+      - brasilidades-back
+    env_file:
+      - ./front-end/.env
+    volumes:
+      - ./front-end:/brasilidades-front
+
+volumes:
+  postgres:
