@@ -8,14 +8,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import usePokemonByName from '../../hooks/api/usePokemonByName';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import Baloon from '../../components/Pokemon/Baloon';
+import usePokemonTextByName from '../../hooks/api/usePokemonTextByName';
 
 export default function Pokemon() {
   const [isPokemonDisplay, setIsPokemonDisplay] = useState(false);
   const [pokemonData, setPokemonData] = useState([]);
+  const [pokemonText, setPokemonText] = useState('');
   const [pokemonImage, setPokemonImage] = useState('');
   const [buttonSearch, setButtonSearch] = useState(false);
   const { pokename } = useParams();
   const { pokemonByNameLoading, pokemonByName } = usePokemonByName();
+  const { pokemonTextByNameLoading, pokemonTextByName } = usePokemonTextByName();
   const navigate = useNavigate();
   useEffect(() => {
     searchByName();
@@ -26,8 +29,10 @@ export default function Pokemon() {
   async function searchByName() {
     try {
       const pokemon = await pokemonByName(pokename);
+      const pokemonText = await pokemonTextByName(pokename);
       setPokemonImage(pokemon.sprites.front_default);
       setPokemonData(pokemon);
+      setPokemonText(pokemonText.flavor_text_entries[0].flavor_text);
     } catch (error) {
     }
   }
@@ -76,7 +81,7 @@ export default function Pokemon() {
             <Zoom in={isPokemonDisplay} timeout={500} mountOnEnter unmountOnExit>               
               <PokemonFilters>
                 <AboutFlexing>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec felis lectus. Aenean bibendum tristique eros, eu condimentum nulla. Nunc dapibus, neque et rutrum scelerisque, mauris lorem facilisis ante, ac facilisis libero elit eget ante. Nunc iaculis condimentum nisi vel vestibulum. Nulla pellentesque erat vehicula cursus lobortis.
+                  {pokemonText}
                 </AboutFlexing>
                 <AboutFlexing>
                   <p>Types:</p>

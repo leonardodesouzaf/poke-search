@@ -19,3 +19,8 @@ export async function pokemonByName(name) {
   const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
   return response.data;
 }
+
+export async function pokemonTextByName(name) {
+  const response = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${name}`);
+  return response.data;
+}
