@@ -1,26 +1,22 @@
 import styled from 'styled-components';
 import pokeball from '../../assets/images/pokeball.png';
-import usePokemonByUrl from '../../hooks/api/usePokemonByUrl';
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import { Grow } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 
-export default function Pokemon({ name, url, isSortedOrder, isTypeFilter, setIsGalleryDisplay }) {
-  const { pokemonByUrlLoading, pokemonByUrl } = usePokemonByUrl();
+export default function Pokemon({ name, setIsGalleryDisplay, hashtable, isLoadingList }) {
   const [pokemonId, setPokemonId] = useState();
   const navigate = useNavigate();
   useEffect(() => {
-    if(url) {
+    if(hashtable && hashtable.length !== 0) {
       getPokemonId();
     }
-  }, [isSortedOrder, isTypeFilter]);
+  }, [isLoadingList]);
   async function getPokemonId() {
-    try {
-      const pokemonData = await pokemonByUrl(url);
-      setPokemonId(pokemonData.id);
-    } catch (error) {
-      toast('Error loading the pokémon info');
+    for(let i=0; i<hashtable.length; i++) {
+      if(hashtable[i] === name) {
+        setPokemonId(i+1);
+      }
     }
   }
   function navigateToPokemon(pokename) {
@@ -34,11 +30,7 @@ export default function Pokemon({ name, url, isSortedOrder, isTypeFilter, setIsG
       <Container onClick={() => navigateToPokemon(name)}>
         <img src={pokeball} alt='A red pokeball'/>
         <Number>
-          { pokemonByUrlLoading ? (
-            <></>
-          ):(
-            <>{pokemonId}</>
-          )}
+          {pokemonId}
         </Number>
         <p>{name}</p>
       </Container>
@@ -67,6 +59,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  height: 65px;
   p{
     font-size: 18px;
     margin-left: 10px;

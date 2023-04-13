@@ -24,7 +24,7 @@ export default function Pokemon() {
     searchByName();
     setTimeout(() => {
       setIsPokemonDisplay(true);
-    }, 500);
+    }, 1000);
   }, []);
   async function searchByName() {
     try {
