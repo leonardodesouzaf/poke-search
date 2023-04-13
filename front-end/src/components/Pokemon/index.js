@@ -1,11 +1,20 @@
 import styled from 'styled-components';
 
+export const AboutFlexing = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding-right: 60px;
+  padding-left: 20px;
+  font-size: 17px;
+`;
+
 export const PokemonOrderButton = styled.div`
   box-shadow: 1px 2px 2px 0px darkred;
   font-family: "Lexend Deca", sans-serif;
   color: white;
   background-color: #73c256;
-  font-size: 15px;
+  font-size: 17px;
   width: 42%;
   height: 60px;
   display: flex;
@@ -19,7 +28,7 @@ export const PokemonNumOrderButton = styled.div`
   font-family: "Lexend Deca", sans-serif;
   color: white;
   background-color: #73c256;
-  font-size: 15px;
+  font-size: 17px;
   width: 42%;
   height: 60px;
   display: flex;
@@ -66,6 +75,20 @@ export const PokemonOrder = styled.div`
   }
 `;
 
+export const PokemonFiltersSpace = styled.div`
+  font-family: "Lexend Deca", sans-serif;
+  color: black;
+  font-size: 15px;
+  background-color: white;
+  border-radius: 30px;
+  width: 100%;
+  height: calc(80vh - 75px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  box-shadow: 1px 2px 2px 0px darkred;
+`;
+
 export const PokemonFilters = styled.div`
   font-family: "Lexend Deca", sans-serif;
   color: black;
@@ -77,9 +100,11 @@ export const PokemonFilters = styled.div`
   height: calc(80vh - 75px);
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-evenly;
   padding: 30px;
-  box-shadow: 1px 2px 2px 0px darkred;
+  p{
+    width: 80px;
+  }
 `;
 
 export const PokemonList = styled.div`
