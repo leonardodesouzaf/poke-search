@@ -4,10 +4,12 @@ import usePokemonByUrl from '../../hooks/api/usePokemonByUrl';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Grow } from '@material-ui/core';
+import { useNavigate } from 'react-router-dom';
 
-export default function Pokemon({ name, url, isSortedOrder, isTypeFilter }) {
+export default function Pokemon({ name, url, isSortedOrder, isTypeFilter, setIsGalleryDisplay }) {
   const { pokemonByUrlLoading, pokemonByUrl } = usePokemonByUrl();
   const [pokemonId, setPokemonId] = useState();
+  const navigate = useNavigate();
   useEffect(() => {
     if(url) {
       getPokemonId();
@@ -21,9 +23,15 @@ export default function Pokemon({ name, url, isSortedOrder, isTypeFilter }) {
       toast('Error loading the pokémon info');
     }
   }
+  function navigateToPokemon(pokename) {
+    setIsGalleryDisplay(false);
+    setTimeout(() => {
+      navigate(`/pokemon/${pokename}`);
+    }, 500);
+  }
   return (
     <Grow in={true} timeout={1000} mountOnEnter unmountOnExit>
-      <Container>
+      <Container onClick={() => navigateToPokemon(name)}>
         <img src={pokeball} alt='A red pokeball'/>
         <Number>
           { pokemonByUrlLoading ? (

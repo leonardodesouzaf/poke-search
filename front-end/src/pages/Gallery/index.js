@@ -1,9 +1,9 @@
 import GalleryLayout from '../../layouts/Page';
 import { useEffect, useState } from 'react';
-import { IoIosSearch } from 'react-icons/io';
+import { IoIosSearch, IoMdClose } from 'react-icons/io';
 import { Zoom } from '@material-ui/core';
 import { toast } from 'react-toastify';
-import { ContainerCenter, ContainerLeft, ContainerRight, Flexing, Line, LoadingList, PokemonFilterImg, PokemonFilters, PokemonList, PokemonOrder, PokemonOrderButton, Search, SearchIcon, Title } from '../../components/Gallery';
+import { ContainerCenter, ContainerLeft, ContainerRight, FiltersDiv, FiltersTop, Flexing, Line, LoadingList, PokemonFilterImg, PokemonFilters, PokemonFiltersSpace, PokemonList, PokemonNumOrderButton, PokemonOrder, PokemonOrderButton, ResetFilters, Search, SearchIcon, Title, WrongIcon } from '../../components/Gallery';
 import bluepokeball from '../../assets/images/bluepokeball.png';
 import water from '../../assets/types/water.png';
 import fire from '../../assets/types/fire.png';
@@ -26,33 +26,80 @@ import fairy from '../../assets/types/fairy.png';
 import Pokemon from '../../components/Gallery/Pokemon';
 import useAllPokemons from '../../hooks/api/useAllPokemons';
 import usePokemonsByType from '../../hooks/api/usePokemonsByType';
+import { useNavigate, useParams } from 'react-router-dom';
+import usePokemonByName from '../../hooks/api/usePokemonByName';
 
 export default function Gallery() {
+  const { zoom } = useParams();
+  const [isZoomGallery, setIsZoomGallery] = useState(false);
   const [isGalleryDisplay, setIsGalleryDisplay] = useState(true);
   const [pokemonList, setPokemonList] = useState([]);
   const [isSortedOrder, setIsSortedOrder] = useState(false);
   const [isTypeFilter, setIsTypeFilter] = useState(false);
+  const [typeSelectioned, setTypeSelectioned] = useState('');
   const [isLoadingList, setIsLoadingList] = useState(false);
   const { allPokemonsLoading, allPokemons } = useAllPokemons();
-  const { pokemonsByTypeLoading, pokemonsByType } = usePokemonsByType();
+  const { pokemonsByType } = usePokemonsByType();
+  const { pokemonByNameLoading, pokemonByName } = usePokemonByName();
+  const [nameSearching, setNameSearching] = useState('');
+  const [searchExists, setSearchExists] = useState(true);
+  const [buttonReset, setButtonReset] = useState(false);
+  const [buttonSort, setButtonSort] = useState(false);
+  const [buttonNumeric, setButtonNumeric] = useState(false);
+  const [buttonSearch, setButtonSearch] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
+    if(zoom === 't') {
+      setIsZoomGallery(true);
+    }
     getAllPokemons();
   }, []);
   async function getAllPokemons() {
-    try {
-      setIsLoadingList(true);
-      const pokemons = await allPokemons();
-      setPokemonList(pokemons.results);
-      setIsSortedOrder(false);
-      setIsTypeFilter(false);
+    if(isTypeFilter) {
+      setButtonNumeric(true);
       setTimeout(() => {
-        setIsLoadingList(false);
+        setButtonNumeric(false);
       }, 500);
-    } catch (error) {
-      toast('Error loading the pokémons list');
+      getPokemonsByType(typeSelectioned);
+    }else{
+      if(isSortedOrder) {
+        setButtonNumeric(true);
+        setTimeout(() => {
+          setButtonNumeric(false);
+        }, 500);
+        try {
+          setIsLoadingList(true);
+          const pokemons = await allPokemons();
+          setPokemonList(pokemons.results);
+          setIsSortedOrder(false);
+          setIsTypeFilter(false);
+          setTimeout(() => {
+            setIsLoadingList(false);
+          }, 500);
+        } catch (error) {
+          toast('Error loading the pokémons list');
+        }
+      }else{
+        try {
+          setIsLoadingList(true);
+          const pokemons = await allPokemons();
+          setPokemonList(pokemons.results);
+          setIsSortedOrder(false);
+          setIsTypeFilter(false);
+          setTimeout(() => {
+            setIsLoadingList(false);
+          }, 500);
+        } catch (error) {
+          toast('Error loading the pokémons list');
+        }
+      }
     }
   }
   function sortByName() {
+    setButtonSort(true);
+    setTimeout(() => {
+      setButtonSort(false);
+    }, 500);
     setIsLoadingList(true);
     let sortedList;
     if(isTypeFilter) {
@@ -85,6 +132,7 @@ export default function Gallery() {
   async function getPokemonsByType(type) {
     try {
       setIsLoadingList(true);
+      setTypeSelectioned(type);
       const pokemons = await pokemonsByType(type);
       setPokemonList(pokemons.pokemon);
       setIsSortedOrder(false);
@@ -97,9 +145,203 @@ export default function Gallery() {
       toast('Error loading the type pokémons list');
     }
   }
+  async function resetFiltersOrders() {
+    setButtonReset(true);
+    setTimeout(() => {
+      setButtonReset(false);
+    }, 200);
+    setIsTypeFilter(false);
+    try {
+      setIsLoadingList(true);
+      const pokemons = await allPokemons();
+      setPokemonList(pokemons.results);
+      setIsSortedOrder(true);
+      setIsSortedOrder(false);
+      setIsTypeFilter(false);
+      setTimeout(() => {
+        setIsLoadingList(false);
+      }, 500);
+    } catch (error) {
+      toast('Error loading the pokémons list');
+    }
+  }
+  async function searchByName() {
+    setButtonSearch(true);
+    setTimeout(() => {
+      setButtonSearch(false);
+    }, 500);
+    try {
+      const name = await nameSearching.toLowerCase();
+      const pokemon = await pokemonByName(name);
+      setIsGalleryDisplay(false);
+      setTimeout(() => {
+        navigate(`/pokemon/${name}`);
+      }, 500);
+    } catch (error) {
+      setSearchExists(false);
+      setTimeout(() => {
+        setSearchExists(true);
+      }, 3000);
+    }
+  }
   return (
     <GalleryLayout>
-      <Zoom in={isGalleryDisplay} timeout={500} mountOnEnter unmountOnExit>
+      { isZoomGallery ? (
+        <Zoom in={true} timeout={500} mountOnEnter unmountOnExit>
+          <Flexing>
+            <ContainerLeft>
+              <Title>
+                <img src={bluepokeball} alt='Its a pokeball in blue color'/>
+                <p>Pokédex</p>
+                <img src={bluepokeball} alt='Its a pokeball in blue color'/>
+              </Title>
+              <PokemonList>
+                { isLoadingList ? (
+                  <LoadingList><p>Loading...</p></LoadingList>
+                ):(
+                  <></>
+                ) }
+                { allPokemonsLoading ? (
+                  <></>
+                ):(
+                  <>{ isTypeFilter ? (
+                    <Zoom in={isGalleryDisplay} timeout={500} mountOnEnter unmountOnExit>               
+                      <div>{pokemonList.map((pokemon, index) => <Pokemon key={index} name={pokemon.pokemon.name} url={pokemon.pokemon.url} isSortedOrder={isSortedOrder} isTypeFilter={isTypeFilter} setIsGalleryDisplay={setIsGalleryDisplay}/>)}</div>
+                    </Zoom>
+                  ):(
+                    <>{ isSortedOrder ? (
+                      <Zoom in={isGalleryDisplay} timeout={500} mountOnEnter unmountOnExit>               
+                        <div>{pokemonList.map((pokemon, index) => <Pokemon key={index} name={pokemon.name} url={pokemon.url} isSortedOrder={isSortedOrder} isTypeFilter={isTypeFilter} setIsGalleryDisplay={setIsGalleryDisplay}/>)}</div>
+                      </Zoom>
+                    ):(
+                      <Zoom in={isGalleryDisplay} timeout={500} mountOnEnter unmountOnExit>               
+                        <div>{pokemonList.map((pokemon, index) => <Pokemon key={index} name={pokemon.name} url={pokemon.url} isSortedOrder={isSortedOrder} isTypeFilter={isTypeFilter} setIsGalleryDisplay={setIsGalleryDisplay}/>)}</div>
+                      </Zoom>
+                    )}</>
+                  )}</>
+                )}
+              </PokemonList>
+            </ContainerLeft>
+            <ContainerCenter>
+              <Line></Line>
+              <Line></Line>
+            </ContainerCenter>
+            <ContainerRight>
+              <Search searchExists={searchExists}>
+                <input placeholder='Search by name...' onChange={e => setNameSearching(e.target.value)} maxLength="20"/>
+                { searchExists ? (
+                  <SearchIcon buttonSearch={buttonSearch} onClick={() => searchByName()}><IoIosSearch/></SearchIcon>
+                ):(
+                  <WrongIcon><p><IoMdClose/></p></WrongIcon>
+                )}
+              </Search>
+              <PokemonOrder>
+                <p>Order by:</p>
+                <PokemonOrderButton buttonSort={buttonSort} onClick={() => {
+                  if(!isSortedOrder) {
+                    sortByName();
+                  }
+                }}>A-Z</PokemonOrderButton>
+                <PokemonNumOrderButton buttonNumeric={buttonNumeric} onClick={() => {
+                  if(isSortedOrder) {
+                    getAllPokemons();
+                  }
+                }}>1-9</PokemonNumOrderButton>
+              </PokemonOrder>
+              <PokemonFiltersSpace>
+                <Zoom in={isGalleryDisplay} timeout={500} mountOnEnter unmountOnExit>               
+                  <PokemonFilters>
+                    <FiltersTop>
+                      <p>Search by type:</p>
+                      <ResetFilters buttonReset={buttonReset} onClick={() => resetFiltersOrders()}>Reset</ResetFilters>
+                    </FiltersTop>
+                    <FiltersDiv>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('water')}>
+                        <img src={water} alt='Pokemon type'/>
+                        <p>Water</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('fire')}>
+                        <img src={fire} alt='Pokemon type'/>
+                        <p>Fire</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('grass')}>
+                        <img src={grass} alt='Pokemon type'/>
+                        <p>Grass</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('ground')}>
+                        <img src={ground} alt='Pokemon type'/>
+                        <p>Ground</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('rock')}>
+                        <img src={rock} alt='Pokemon type'/>
+                        <p>Rock</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('steel')}>
+                        <img src={steel} alt='Pokemon type'/>
+                        <p>Steel</p>
+                      </PokemonFilterImg>
+                    </FiltersDiv>
+                    <Line></Line>
+                    <FiltersDiv>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('ice')}>
+                        <img src={ice} alt='Pokemon type'/>
+                        <p>Ice</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('electric')}>
+                        <img src={eletric} alt='Pokemon type'/>
+                        <p>Electric</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('dragon')}>
+                        <img src={dragon} alt='Pokemon type'/>
+                        <p>Dragon</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('ghost')}>
+                        <img src={ghost} alt='Pokemon type'/>
+                        <p>Ghost</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('psychic')}>
+                        <img src={psychic} alt='Pokemon type'/>
+                        <p>Psychic</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('normal')}>
+                        <img src={normal} alt='Pokemon type'/>
+                        <p>Normal</p>
+                      </PokemonFilterImg>
+                    </FiltersDiv>
+                    <Line></Line>
+                    <FiltersDiv>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('fighting')}>
+                        <img src={fightning} alt='Pokemon type'/>
+                        <p>Fighting</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('poison')}>
+                        <img src={poison} alt='Pokemon type'/>
+                        <p>Poison</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('bug')}>
+                        <img src={bug} alt='Pokemon type'/>
+                        <p>Bug</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('flying')}>
+                        <img src={flying} alt='Pokemon type'/>
+                        <p>Flying</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('dark')}>
+                        <img src={dark} alt='Pokemon type'/>
+                        <p>Dark</p>
+                      </PokemonFilterImg>
+                      <PokemonFilterImg onClick={() => getPokemonsByType('fairy')}>
+                        <img src={fairy} alt='Pokemon type'/>
+                        <p>Fairy</p>
+                      </PokemonFilterImg>
+                    </FiltersDiv>
+                  </PokemonFilters>
+                </Zoom>
+              </PokemonFiltersSpace>
+            </ContainerRight>
+          </Flexing>
+        </Zoom>
+      ):(
         <Flexing>
           <ContainerLeft>
             <Title>
@@ -117,12 +359,18 @@ export default function Gallery() {
                 <></>
               ):(
                 <>{ isTypeFilter ? (
-                  <>{pokemonList.map((pokemon, index) => <Pokemon key={index} name={pokemon.pokemon.name} url={pokemon.pokemon.url} isSortedOrder={isSortedOrder} isTypeFilter={isTypeFilter}/>)}</>
+                  <Zoom in={isGalleryDisplay} timeout={500} mountOnEnter unmountOnExit>               
+                    <div>{pokemonList.map((pokemon, index) => <Pokemon key={index} name={pokemon.pokemon.name} url={pokemon.pokemon.url} isSortedOrder={isSortedOrder} isTypeFilter={isTypeFilter} setIsGalleryDisplay={setIsGalleryDisplay}/>)}</div>
+                  </Zoom>
                 ):(
                   <>{ isSortedOrder ? (
-                    <>{pokemonList.map((pokemon, index) => <Pokemon key={index} name={pokemon.name} url={pokemon.url} isSortedOrder={isSortedOrder} isTypeFilter={isTypeFilter}/>)}</>
+                    <Zoom in={isGalleryDisplay} timeout={500} mountOnEnter unmountOnExit>               
+                      <div>{pokemonList.map((pokemon, index) => <Pokemon key={index} name={pokemon.name} url={pokemon.url} isSortedOrder={isSortedOrder} isTypeFilter={isTypeFilter} setIsGalleryDisplay={setIsGalleryDisplay}/>)}</div>
+                    </Zoom>
                   ):(
-                    <>{pokemonList.map((pokemon, index) => <Pokemon key={index} name={pokemon.name} url={pokemon.url} isSortedOrder={isSortedOrder} isTypeFilter={isTypeFilter}/>)}</>
+                    <Zoom in={isGalleryDisplay} timeout={500} mountOnEnter unmountOnExit>               
+                      <div>{pokemonList.map((pokemon, index) => <Pokemon key={index} name={pokemon.name} url={pokemon.url} isSortedOrder={isSortedOrder} isTypeFilter={isTypeFilter} setIsGalleryDisplay={setIsGalleryDisplay}/>)}</div>
+                    </Zoom>
                   )}</>
                 )}</>
               )}
@@ -133,109 +381,120 @@ export default function Gallery() {
             <Line></Line>
           </ContainerCenter>
           <ContainerRight>
-            <Search>
-              <p>Search by name...</p>
-              <SearchIcon><IoIosSearch/></SearchIcon>
+            <Search searchExists={searchExists}>
+              <input placeholder='Search by name...' onChange={e => setNameSearching(e.target.value)} maxLength="20"/>
+              { searchExists ? (
+                <SearchIcon buttonSearch={buttonSearch} onClick={() => searchByName()}><IoIosSearch/></SearchIcon>
+              ):(
+                <WrongIcon><p><IoMdClose/></p></WrongIcon>
+              )}
             </Search>
             <PokemonOrder>
               <p>Order by:</p>
-              <PokemonOrderButton onClick={() => {
+              <PokemonOrderButton buttonSort={buttonSort} onClick={() => {
                 if(!isSortedOrder) {
                   sortByName();
                 }
               }}>A-Z</PokemonOrderButton>
-              <PokemonOrderButton onClick={() => {
+              <PokemonNumOrderButton buttonNumeric={buttonNumeric} onClick={() => {
                 if(isSortedOrder) {
                   getAllPokemons();
                 }
-              }}>1-1279</PokemonOrderButton>
+              }}>1-9</PokemonNumOrderButton>
             </PokemonOrder>
-            <PokemonFilters>
-              <p>Search by type:</p>
-              <div>
-                <PokemonFilterImg onClick={() => getPokemonsByType('water')}>
-                  <img src={water} alt='Pokemon type'/>
-                  <p>Water</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('fire')}>
-                  <img src={fire} alt='Pokemon type'/>
-                  <p>Fire</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('grass')}>
-                  <img src={grass} alt='Pokemon type'/>
-                  <p>Grass</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('ground')}>
-                  <img src={ground} alt='Pokemon type'/>
-                  <p>Ground</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('rock')}>
-                  <img src={rock} alt='Pokemon type'/>
-                  <p>Rock</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('steel')}>
-                  <img src={steel} alt='Pokemon type'/>
-                  <p>Steel</p>
-                </PokemonFilterImg>
-              </div>
-              <Line></Line>
-              <div>
-                <PokemonFilterImg onClick={() => getPokemonsByType('ice')}>
-                  <img src={ice} alt='Pokemon type'/>
-                  <p>Ice</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('electric')}>
-                  <img src={eletric} alt='Pokemon type'/>
-                  <p>Electric</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('dragon')}>
-                  <img src={dragon} alt='Pokemon type'/>
-                  <p>Dragon</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('ghost')}>
-                  <img src={ghost} alt='Pokemon type'/>
-                  <p>Ghost</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('psychic')}>
-                  <img src={psychic} alt='Pokemon type'/>
-                  <p>Psychic</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('normal')}>
-                  <img src={normal} alt='Pokemon type'/>
-                  <p>Normal</p>
-                </PokemonFilterImg>
-              </div>
-              <Line></Line>
-              <div>
-                <PokemonFilterImg onClick={() => getPokemonsByType('fighting')}>
-                  <img src={fightning} alt='Pokemon type'/>
-                  <p>Fighting</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('poison')}>
-                  <img src={poison} alt='Pokemon type'/>
-                  <p>Poison</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('bug')}>
-                  <img src={bug} alt='Pokemon type'/>
-                  <p>Bug</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('flying')}>
-                  <img src={flying} alt='Pokemon type'/>
-                  <p>Flying</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('dark')}>
-                  <img src={dark} alt='Pokemon type'/>
-                  <p>Dark</p>
-                </PokemonFilterImg>
-                <PokemonFilterImg onClick={() => getPokemonsByType('fairy')}>
-                  <img src={fairy} alt='Pokemon type'/>
-                  <p>Fairy</p>
-                </PokemonFilterImg>
-              </div>
-            </PokemonFilters>
+            <PokemonFiltersSpace>
+              <Zoom in={isGalleryDisplay} timeout={500} mountOnEnter unmountOnExit>               
+                <PokemonFilters>
+                  <FiltersTop>
+                    <p>Search by type:</p>
+                    <ResetFilters buttonReset={buttonReset} onClick={() => resetFiltersOrders()}>Reset</ResetFilters>
+                  </FiltersTop>
+                  <FiltersDiv>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('water')}>
+                      <img src={water} alt='Pokemon type'/>
+                      <p>Water</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('fire')}>
+                      <img src={fire} alt='Pokemon type'/>
+                      <p>Fire</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('grass')}>
+                      <img src={grass} alt='Pokemon type'/>
+                      <p>Grass</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('ground')}>
+                      <img src={ground} alt='Pokemon type'/>
+                      <p>Ground</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('rock')}>
+                      <img src={rock} alt='Pokemon type'/>
+                      <p>Rock</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('steel')}>
+                      <img src={steel} alt='Pokemon type'/>
+                      <p>Steel</p>
+                    </PokemonFilterImg>
+                  </FiltersDiv>
+                  <Line></Line>
+                  <FiltersDiv>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('ice')}>
+                      <img src={ice} alt='Pokemon type'/>
+                      <p>Ice</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('electric')}>
+                      <img src={eletric} alt='Pokemon type'/>
+                      <p>Electric</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('dragon')}>
+                      <img src={dragon} alt='Pokemon type'/>
+                      <p>Dragon</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('ghost')}>
+                      <img src={ghost} alt='Pokemon type'/>
+                      <p>Ghost</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('psychic')}>
+                      <img src={psychic} alt='Pokemon type'/>
+                      <p>Psychic</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('normal')}>
+                      <img src={normal} alt='Pokemon type'/>
+                      <p>Normal</p>
+                    </PokemonFilterImg>
+                  </FiltersDiv>
+                  <Line></Line>
+                  <FiltersDiv>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('fighting')}>
+                      <img src={fightning} alt='Pokemon type'/>
+                      <p>Fighting</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('poison')}>
+                      <img src={poison} alt='Pokemon type'/>
+                      <p>Poison</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('bug')}>
+                      <img src={bug} alt='Pokemon type'/>
+                      <p>Bug</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('flying')}>
+                      <img src={flying} alt='Pokemon type'/>
+                      <p>Flying</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('dark')}>
+                      <img src={dark} alt='Pokemon type'/>
+                      <p>Dark</p>
+                    </PokemonFilterImg>
+                    <PokemonFilterImg onClick={() => getPokemonsByType('fairy')}>
+                      <img src={fairy} alt='Pokemon type'/>
+                      <p>Fairy</p>
+                    </PokemonFilterImg>
+                  </FiltersDiv>
+                </PokemonFilters>
+              </Zoom>
+            </PokemonFiltersSpace>
           </ContainerRight>
         </Flexing>
-      </Zoom>
+      )}
     </GalleryLayout>
   );
 }

@@ -11,7 +11,7 @@ export default function Homepage() {
   function navigateToGallery() {
     setIsHomepageDisplay(false);
     setTimeout(() => {
-      navigate('/gallery');
+      navigate('/gallery/t');
     }, 1000);
   }
 

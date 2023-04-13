@@ -14,3 +14,8 @@ export async function pokemonsByType(type) {
   const response = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
   return response.data;
 }
+
+export async function pokemonByName(name) {
+  const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+  return response.data;
+}
