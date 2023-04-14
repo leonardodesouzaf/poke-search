@@ -1,7 +1,8 @@
 import GalleryLayout from '../../layouts/Page';
 import { useEffect, useState } from 'react';
-import { IoIosSearch, IoMdClose } from 'react-icons/io';
 import { Button, Tooltip, Zoom } from '@material-ui/core';
+import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
 import { ContainerCenter, ContainerLeft, ContainerRight, FiltersDiv, FiltersTop, Flexing, Line, LoadingList, PokemonFilterImg, PokemonFilters, PokemonFiltersSpace, PokemonList, PokemonNumOrderButton, PokemonOrder, PokemonOrderButton, ResetFilters, Search, SearchIconDiv, SearchInput, Title, WrongIcon } from '../../components/Gallery';
 import bluepokeball from '../../assets/images/bluepokeball.png';
@@ -239,11 +240,11 @@ export default function Gallery() {
                 { searchExists ? (
                   <SearchIconDiv buttonSearch={buttonSearch} onClick={() => searchByName()}>
                     <Button variant='contained' color='inherit' onClick={() => searchByName()}>
-                      <IoIosSearch/>
+                      <SearchIcon sx={{ fontSize: 30 }}/>
                     </Button>
                   </SearchIconDiv>
                 ):(
-                  <WrongIcon><p><IoMdClose/></p></WrongIcon>
+                  <WrongIcon><p><CloseIcon sx={{ fontSize: 30 }}/></p></WrongIcon>
                 )}
               </Search>
               <PokemonOrder>
@@ -416,11 +417,11 @@ export default function Gallery() {
                 { searchExists ? (
                   <SearchIconDiv buttonSearch={buttonSearch} onClick={() => searchByName()}>
                     <Button variant='contained' color='inherit' onClick={() => searchByName()}>
-                      <IoIosSearch/>
+                      <SearchIcon sx={{ fontSize: 30 }}/>
                     </Button>
                   </SearchIconDiv>
                 ):(
-                  <WrongIcon><p><IoMdClose/></p></WrongIcon>
+                  <WrongIcon><p><CloseIcon sx={{ fontSize: 30 }}/></p></WrongIcon>
                 )}
               </Search>
               <PokemonOrder>

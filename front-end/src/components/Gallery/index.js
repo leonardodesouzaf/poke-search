@@ -240,6 +240,7 @@ export const WrongIcon = styled.div`
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
   padding-right: 2px;
+  padding-top: 4px;
   p{
     animation: wiggle 2s linear;
   }
