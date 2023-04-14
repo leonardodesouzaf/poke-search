@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import pokeball from '../../assets/images/pokeball.png';
 import { useEffect, useState } from 'react';
-import { Grow } from '@material-ui/core';
+import { Button, Grow } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 
 export default function Pokemon({ name, setIsGalleryDisplay, hashtable, isLoadingList }) {
@@ -27,12 +27,14 @@ export default function Pokemon({ name, setIsGalleryDisplay, hashtable, isLoadin
   }
   return (
     <Grow in={true} timeout={1000} mountOnEnter unmountOnExit>
-      <Container onClick={() => navigateToPokemon(name)}>
-        <img src={pokeball} alt='A red pokeball'/>
-        <Number>
-          {pokemonId}
-        </Number>
-        <p>{name}</p>
+      <Container>
+        <Button variant='contained' color='inherit' onClick={() => navigateToPokemon(name)}>
+          <img src={pokeball} alt='A red pokeball'/>
+          <Number>
+            {pokemonId}
+          </Number>
+          <p>{name}</p>
+        </Button>
       </Container>
     </Grow>
   );
@@ -50,54 +52,62 @@ const Number = styled.div`
 `;
 
 const Container = styled.div`
-  background-color: white;
-  border-radius: 50px;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  padding: 5px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  height: 65px;
-  p{
-    font-size: 18px;
-    margin-left: 10px;
-    text-transform: capitalize;
-  }
-  img{
-    height: 52px;
-    object-fit: cover;
-    margin-right: 5px;
-  }
-  :hover{
-    cursor: pointer;
-    background-color: #8e8e8e;
-    color: white;
-    img{
-      animation: wiggle 1s linear infinite;
+  Button{
+    background-color: white;
+    border-radius: 50px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 5px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
+    height: 65px;
+    text-transform: none;
+    font-family: "Lexend Deca", sans-serif;
+    p{
+      font-size: 18px;
+      margin-left: 10px;
+      text-transform: capitalize;
     }
-    @keyframes wiggle {
-      0%, 7% {
-        transform: rotateZ(0);
+    img{
+      height: 52px;
+      object-fit: cover;
+      margin-right: 5px;
+    }
+    :focus{
+      box-shadow: none;
+    }
+    :hover{
+      cursor: pointer;
+      background-color: #8e8e8e;
+      color: white;
+      img{
+        animation: wiggle 1s linear infinite;
       }
-      15% {
-        transform: rotateZ(-25deg);
-      }
-      20% {
-        transform: rotateZ(20deg);
-      }
-      25% {
-        transform: rotateZ(-20deg);
-      }
-      30% {
-        transform: rotateZ(12deg);
-      }
-      35% {
-        transform: rotateZ(-8deg);
-      }
-      40%, 100% {
-        transform: rotateZ(0);
+      @keyframes wiggle {
+        0%, 7% {
+          transform: rotateZ(0);
+        }
+        15% {
+          transform: rotateZ(-25deg);
+        }
+        20% {
+          transform: rotateZ(20deg);
+        }
+        25% {
+          transform: rotateZ(-20deg);
+        }
+        30% {
+          transform: rotateZ(12deg);
+        }
+        35% {
+          transform: rotateZ(-8deg);
+        }
+        40%, 100% {
+          transform: rotateZ(0);
+        }
       }
     }
   }

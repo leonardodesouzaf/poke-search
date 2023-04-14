@@ -1,9 +1,9 @@
 import GalleryLayout from '../../layouts/Page';
 import { useEffect, useState } from 'react';
 import { IoIosSearch, IoMdClose } from 'react-icons/io';
-import { Zoom } from '@material-ui/core';
+import { Button, Tooltip, Zoom } from '@material-ui/core';
 import { toast } from 'react-toastify';
-import { ContainerCenter, ContainerLeft, ContainerRight, FiltersDiv, FiltersTop, Flexing, Line, LoadingList, PokemonFilterImg, PokemonFilters, PokemonFiltersSpace, PokemonList, PokemonNumOrderButton, PokemonOrder, PokemonOrderButton, ResetFilters, Search, SearchIcon, Title, WrongIcon } from '../../components/Gallery';
+import { ContainerCenter, ContainerLeft, ContainerRight, FiltersDiv, FiltersTop, Flexing, Line, LoadingList, PokemonFilterImg, PokemonFilters, PokemonFiltersSpace, PokemonList, PokemonNumOrderButton, PokemonOrder, PokemonOrderButton, ResetFilters, Search, SearchIconDiv, SearchInput, Title, WrongIcon } from '../../components/Gallery';
 import bluepokeball from '../../assets/images/bluepokeball.png';
 import water from '../../assets/types/water.png';
 import fire from '../../assets/types/fire.png';
@@ -235,32 +235,54 @@ export default function Gallery() {
             </ContainerCenter>
             <ContainerRight>
               <Search searchExists={searchExists}>
-                <input placeholder='Search by name...' onChange={e => setNameSearching(e.target.value)} maxLength="20"/>
+                <SearchInput id="outlined-basic" onChange={e => setNameSearching(e.target.value)} label='Search by name...' variant='outlined' fullWidth/>
                 { searchExists ? (
-                  <SearchIcon buttonSearch={buttonSearch} onClick={() => searchByName()}><IoIosSearch/></SearchIcon>
+                  <SearchIconDiv buttonSearch={buttonSearch} onClick={() => searchByName()}>
+                    <Button variant='contained' color='inherit' onClick={() => searchByName()}>
+                      <IoIosSearch/>
+                    </Button>
+                  </SearchIconDiv>
                 ):(
                   <WrongIcon><p><IoMdClose/></p></WrongIcon>
                 )}
               </Search>
               <PokemonOrder>
                 <p>Order by:</p>
-                <PokemonOrderButton buttonSort={buttonSort} onClick={() => {
-                  if(!isSortedOrder) {
-                    sortByName();
-                  }
-                }}>A-Z</PokemonOrderButton>
-                <PokemonNumOrderButton buttonNumeric={buttonNumeric} onClick={() => {
-                  if(isSortedOrder) {
-                    getAllPokemons();
-                  }
-                }}>1-9</PokemonNumOrderButton>
+                <PokemonOrderButton buttonSort={buttonSort}>
+                  <Tooltip title="Reorder the list alphabetically" TransitionComponent={Zoom}  arrow>
+                    <Button variant='contained' color='inherit' onClick={() => {
+                      if(!isSortedOrder) {
+                        sortByName();
+                      }
+                    }}>
+                      A-Z
+                    </Button>
+                  </Tooltip>
+                </PokemonOrderButton>
+                <PokemonNumOrderButton buttonNumeric={buttonNumeric}>
+                  <Tooltip title="Reorder the list numerically" TransitionComponent={Zoom} arrow>
+                    <Button variant='contained' color='inherit' onClick={() => {
+                      if(isSortedOrder) {
+                        getAllPokemons();
+                      }
+                    }}>
+                      1-9
+                    </Button>
+                  </Tooltip>
+                </PokemonNumOrderButton>
               </PokemonOrder>
               <PokemonFiltersSpace>
                 <Zoom in={isGalleryDisplay} timeout={500} mountOnEnter unmountOnExit>               
                   <PokemonFilters>
                     <FiltersTop>
                       <p>Search by type:</p>
-                      <ResetFilters buttonReset={buttonReset} onClick={() => resetFiltersOrders()}>Reset</ResetFilters>
+                      <ResetFilters buttonReset={buttonReset}>
+                        <Tooltip title="Reset all the filters and orders" placement="left" TransitionComponent={Zoom} arrow>
+                          <Button variant='contained' color='inherit' onClick={() => resetFiltersOrders()}>
+                            Reset
+                          </Button>
+                        </Tooltip>
+                      </ResetFilters>
                     </FiltersTop>
                     <FiltersDiv>
                       <PokemonFilterImg onClick={() => getPokemonsByType('water')}>
@@ -390,32 +412,54 @@ export default function Gallery() {
             </ContainerCenter>
             <ContainerRight>
               <Search searchExists={searchExists}>
-                <input placeholder='Search by name...' onChange={e => setNameSearching(e.target.value)} maxLength="20"/>
+                <SearchInput id="outlined-basic" onChange={e => setNameSearching(e.target.value)} label='Search by name...' variant='outlined' fullWidth/>
                 { searchExists ? (
-                  <SearchIcon buttonSearch={buttonSearch} onClick={() => searchByName()}><IoIosSearch/></SearchIcon>
+                  <SearchIconDiv buttonSearch={buttonSearch} onClick={() => searchByName()}>
+                    <Button variant='contained' color='inherit' onClick={() => searchByName()}>
+                      <IoIosSearch/>
+                    </Button>
+                  </SearchIconDiv>
                 ):(
                   <WrongIcon><p><IoMdClose/></p></WrongIcon>
                 )}
               </Search>
               <PokemonOrder>
                 <p>Order by:</p>
-                <PokemonOrderButton buttonSort={buttonSort} onClick={() => {
-                  if(!isSortedOrder) {
-                    sortByName();
-                  }
-                }}>A-Z</PokemonOrderButton>
-                <PokemonNumOrderButton buttonNumeric={buttonNumeric} onClick={() => {
-                  if(isSortedOrder) {
-                    getAllPokemons();
-                  }
-                }}>1-9</PokemonNumOrderButton>
+                <PokemonOrderButton buttonSort={buttonSort}>
+                  <Tooltip title="Reorder the list alphabetically" TransitionComponent={Zoom}  arrow>
+                    <Button variant='contained' color='inherit' onClick={() => {
+                      if(!isSortedOrder) {
+                        sortByName();
+                      }
+                    }}>
+                      A-Z
+                    </Button>
+                  </Tooltip>
+                </PokemonOrderButton>
+                <PokemonNumOrderButton buttonNumeric={buttonNumeric}>
+                  <Tooltip title="Reorder the list numerically" TransitionComponent={Zoom} arrow>
+                    <Button variant='contained' color='inherit' onClick={() => {
+                      if(isSortedOrder) {
+                        getAllPokemons();
+                      }
+                    }}>
+                      1-9
+                    </Button>
+                  </Tooltip>
+                </PokemonNumOrderButton>
               </PokemonOrder>
               <PokemonFiltersSpace>
                 <Zoom in={isGalleryDisplay} timeout={500} mountOnEnter unmountOnExit>               
                   <PokemonFilters>
                     <FiltersTop>
                       <p>Search by type:</p>
-                      <ResetFilters buttonReset={buttonReset} onClick={() => resetFiltersOrders()}>Reset</ResetFilters>
+                      <ResetFilters buttonReset={buttonReset}>
+                        <Tooltip title="Reset all the filters and orders" placement="left" TransitionComponent={Zoom} arrow>
+                          <Button variant='contained' color='inherit' onClick={() => resetFiltersOrders()}>
+                            Reset
+                          </Button>
+                        </Tooltip>
+                      </ResetFilters>
                     </FiltersTop>
                     <FiltersDiv>
                       <PokemonFilterImg onClick={() => getPokemonsByType('water')}>

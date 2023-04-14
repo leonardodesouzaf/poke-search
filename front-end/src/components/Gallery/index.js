@@ -1,3 +1,4 @@
+import { TextField } from '@material-ui/core';
 import styled from 'styled-components';
 
 export const PokemonFilterImg = styled.div`
@@ -24,38 +25,54 @@ export const PokemonFilterImg = styled.div`
 `;
 
 export const PokemonOrderButton = styled.div`
-  box-shadow: ${(props) => (props.buttonSort ? 'inset 0 0 10px black' : '1px 2px 2px 0px darkred')};
-  font-family: "Lexend Deca", sans-serif;
-  color: white;
-  background-color: #73c256;
-  font-size: 15px;
   width: 42%;
-  height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50px;
-  :hover{
-    cursor: pointer;
-    filter: brightness(1.05);
+  Button{
+    box-shadow: ${(props) => (props.buttonSort ? 'inset 0 0 10px black' : '1px 2px 2px 0px darkred')};
+    font-family: "Lexend Deca", sans-serif;
+    color: white;
+    background-color: #73c256;
+    font-size: 15px;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    :hover{
+      cursor: pointer;
+      filter: brightness(1.05);
+      background-color: #73c256;
+      box-shadow: ${(props) => (props.buttonSort ? 'inset 0 0 10px black' : '1px 2px 2px 0px darkred')};
+      :focus{
+        box-shadow: ${(props) => (props.buttonSort ? 'inset 0 0 10px black' : '1px 2px 2px 0px darkred')};
+      }
+    }
   }
 `;
 
 export const PokemonNumOrderButton = styled.div`
-  box-shadow: ${(props) => (props.buttonNumeric ? 'inset 0 0 10px black' : '1px 2px 2px 0px darkred')};
-  font-family: "Lexend Deca", sans-serif;
-  color: white;
-  background-color: #73c256;
-  font-size: 15px;
   width: 42%;
-  height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50px;
-  :hover{
-    cursor: pointer;
-    filter: brightness(1.05);
+  Button{
+    box-shadow: ${(props) => (props.buttonNumeric ? 'inset 0 0 10px black' : '1px 2px 2px 0px darkred')};
+    font-family: "Lexend Deca", sans-serif;
+    color: white;
+    background-color: #73c256;
+    font-size: 15px;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    :hover{
+      cursor: pointer;
+      filter: brightness(1.05);
+      background-color: #73c256;
+      box-shadow: ${(props) => (props.buttonNumeric ? 'inset 0 0 10px black' : '1px 2px 2px 0px darkred')};
+      :focus{
+        box-shadow: ${(props) => (props.buttonNumeric ? 'inset 0 0 10px black' : '1px 2px 2px 0px darkred')};
+      }
+    }
   }
 `;
 
@@ -73,17 +90,27 @@ export const PokemonOrder = styled.div`
 `;
 
 export const ResetFilters = styled.div`
-  box-shadow: ${(props) => (props.buttonReset ? 'inset 0 0 10px gray' : '1px 1px 1px 0px gray')};
-  width: 20%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: lightgray;
-  border-radius: 20px;
-  height: 30px;
-  :hover{
-    cursor: pointer;
-    filter: brightness(1.05);
+  Button{
+    box-shadow: ${(props) => (props.buttonReset ? 'inset 0 0 10px gray' : '1px 1px 1px 0px gray')};
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgray;
+    border-radius: 20px;
+    height: 30px;
+    font-size: 15px;
+    text-transform: none;
+    font-family: "Lexend Deca", sans-serif;
+    :hover{
+      cursor: pointer;
+      filter: brightness(1.05);
+      background-color: lightgray;
+      box-shadow: ${(props) => (props.buttonReset ? 'inset 0 0 10px gray' : '1px 1px 1px 0px gray')};
+    }
+    :focus{
+      box-shadow: ${(props) => (props.buttonReset ? 'inset 0 0 10px gray' : '1px 1px 1px 0px gray')};
+    }
   }
 `;
 
@@ -170,22 +197,34 @@ export const PokemonList = styled.div`
   position: relative;
 `;
 
-export const SearchIcon = styled.div`
-  box-shadow: ${(props) => (props.buttonSearch ? 'inset 0 0 10px gray' : '0px 0px 4px 0px gray')};
-  color: black;
-  font-size: 25px;
-  background-color: lightgray;
-  width: 70px;
-  height: 60px;
+export const SearchIconDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top-right-radius: 30px;
-  border-bottom-right-radius: 30px;
-  padding-right: 2px;
-  :hover{
-    cursor: pointer;
-    filter: brightness(1.05);
+  width: 60px;
+  Button{
+    box-shadow: ${(props) => (props.buttonSearch ? 'inset 0 0 10px gray' : '0px 0px 3px 0px gray')};
+    color: black;
+    font-size: 25px;
+    background-color: lightgray;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    padding-right: 18px;
+    :hover{
+      cursor: pointer;
+      filter: brightness(1.05);
+      background-color: lightgray;
+      box-shadow: ${(props) => (props.buttonSearch ? 'inset 0 0 10px gray' : '0px 0px 3px 0px gray')};
+    }
+    :focus{
+      box-shadow: ${(props) => (props.buttonSearch ? 'inset 0 0 10px gray' : '0px 0px 3px 0px gray')};
+    }
   }
 `;
 
@@ -229,29 +268,56 @@ export const WrongIcon = styled.div`
   }
 `;
 
+export const SearchInput = styled(TextField)`
+  .MuiInputBase-input{
+    width: 100%;
+    border: none !important;
+    border-radius: 50px;
+  }
+  label{
+    font-family: "Lexend Deca", sans-serif;
+    font-size: 15px;
+    color: grey !important;
+    background-color: white;
+    border-radius: 10px;
+    padding: 3px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    margin-top: -3px;
+  }
+  .MuiOutlinedInput-root{
+    border: none !important;
+    fieldset{
+      border: none !important;
+    }
+    :hover fieldset{
+      border: none !important;
+    }
+    .Mui-focused{
+      border: none !important;
+    }
+    .Mui-focused fieldset{
+      border: none !important;
+    }
+  }
+`;
+
 export const Search = styled.div`
   box-shadow: 1px 2px 2px 0px darkred;
   font-family: "Lexend Deca", sans-serif;
   color: black;
   background-color: ${(props) => (props.searchExists ? 'white' : 'lightcoral')};
   border-radius: 50px;
-  padding-left: 20px;
+  padding-left: 10px;
   width: 100%;
   height: 60px;
   margin-bottom: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  input{
-    background-color: ${(props) => (props.searchExists ? 'white' : 'lightcoral')};
-    border: none;
-    font-family: "Lexend Deca", sans-serif;
-    font-size: 15px;
-    color: black !important;
-    width: 100%;
-    height: 90%;
-    :focus {
-      outline: none;
+  SearchInput{
+    .MuiInputBase-input{
+      background-color: ${(props) => (props.searchExists ? 'white' : 'lightcoral')};
     }
   }
 `;
