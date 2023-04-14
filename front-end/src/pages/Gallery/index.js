@@ -1,6 +1,6 @@
 import GalleryLayout from '../../layouts/Page';
 import { useEffect, useState } from 'react';
-import { Button, Tooltip, Zoom } from '@material-ui/core';
+import { Button, List, Tooltip, Zoom } from '@material-ui/core';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
@@ -400,7 +400,7 @@ export default function Gallery() {
                       </Zoom>
                     ):(
                       <Zoom in={isGalleryDisplay} timeout={500} mountOnEnter unmountOnExit>               
-                        <div>{pokemonList.map((pokemon, index) => <Pokemon key={index} hashtable={hashtable} isLoadingList={isLoadingList} name={pokemon.name}  setIsGalleryDisplay={setIsGalleryDisplay}/>)}</div>
+                        <List>{pokemonList.map((pokemon, index) => <Pokemon key={index} hashtable={hashtable} isLoadingList={isLoadingList} name={pokemon.name}  setIsGalleryDisplay={setIsGalleryDisplay}/>)}</List>
                       </Zoom>
                     )}</>
                   )}</>
